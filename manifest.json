@@ -1,0 +1,31 @@
+{
+  "manifest_version": 3,
+  "name": "课外活动定位兼容",
+  "version": "1.0.0",
+  "description": "让电脑版 Chrome 中的课外活动页面读取 Mac 的真实当前位置。",
+  "minimum_chrome_version": "116",
+  "permissions": ["geolocation", "offscreen"],
+  "background": {
+    "service_worker": "service-worker.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "http://peawx.sec.tjcu.edu.cn/*",
+        "https://peawx.sec.tjcu.edu.cn/*"
+      ],
+      "js": ["content-bridge.js"],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "http://peawx.sec.tjcu.edu.cn/*",
+        "https://peawx.sec.tjcu.edu.cn/*"
+      ],
+      "js": ["page-bridge.js"],
+      "run_at": "document_start",
+      "world": "MAIN"
+    }
+  ]
+}
+
