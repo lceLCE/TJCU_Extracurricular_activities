@@ -1,6 +1,6 @@
 # 天津商业大学课外活动定位兼容插件
 
-使用codex构建
+使用codex构建，用于在Chrome中访问天津商业大学课外活动打卡平台时能够正常获取位置
 
 本插件仅在电脑版 Chrome 访问 `peawx.sec.tjcu.edu.cn` 时生效，把网页的 `wx.getLocation` 调用连接到 Mac 的真实定位服务。
 
