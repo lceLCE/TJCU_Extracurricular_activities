@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
-  "name": "TJCU课外活动定位兼容",
+  "name": "Fuck TJCU 体育打卡",
   "version": "1.0.1",
-  "description": "让电脑版 Chrome 中的课外活动页面读取 Mac 的真实当前位置。",
+  "description": "一款让你足不出户就能成功完成天津商业大学体育打卡的妙妙Chrome浏览器插件",
   "minimum_chrome_version": "116",
   "permissions": ["geolocation", "offscreen"],
   "background": {
