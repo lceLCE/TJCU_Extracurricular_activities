@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
-  "name": "课外活动定位兼容",
-  "version": "1.0.0",
+  "name": "TJCU课外活动定位兼容",
+  "version": "1.0.1",
   "description": "让电脑版 Chrome 中的课外活动页面读取 Mac 的真实当前位置。",
   "minimum_chrome_version": "116",
   "permissions": ["geolocation", "offscreen"],

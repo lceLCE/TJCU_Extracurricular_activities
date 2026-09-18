@@ -4,6 +4,39 @@
   const PAGE_SOURCE = 'daka-mac-location-page';
   const EXTENSION_SOURCE = 'daka-mac-location-extension';
   const pending = new Map();
+//以下是gpt让我添加的代码，来修改randomUUID在Chrome中报错的问题
+function createRequestId() {
+  if (globalThis.crypto && typeof globalThis.crypto.randomUUID === 'function') {
+    return globalThis.crypto.randomUUID();
+  }
+
+  if (globalThis.crypto && typeof globalThis.crypto.getRandomValues === 'function') {
+    const bytes = new Uint8Array(16);
+    globalThis.crypto.getRandomValues(bytes);
+
+    // UUID v4
+    bytes[6] = (bytes[6] & 0x0f) | 0x40;
+    bytes[8] = (bytes[8] & 0x3f) | 0x80;
+
+    const hex = Array.from(
+      bytes,
+      byte => byte.toString(16).padStart(2, '0')
+    );
+
+    return [
+      hex.slice(0, 4).join(''),
+      hex.slice(4, 6).join(''),
+      hex.slice(6, 8).join(''),
+      hex.slice(8, 10).join(''),
+      hex.slice(10, 16).join('')
+    ].join('-');
+  }
+
+  return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`;
+}
+
+//以上是gpt让我添加的代码，来修改randomUUID在Chrome中报错的问题
+
 
   function wgs84ToGcj02(longitude, latitude) {
     if (longitude < 72.004 || longitude > 137.8347 || latitude < 0.8293 || latitude > 55.8271) {
@@ -36,9 +69,25 @@
   function finish(options, response) {
     if (response.ok) {
       const location = response.location;
+
+      console.log(
+      '[定位] 原始真实坐标（WGS84）:',
+      '纬度 =', location.latitude,
+      '经度 =', location.longitude,
+      '精度 =', location.accuracy
+    );
+
       const coordinates = options.type === 'gcj02'
         ? wgs84ToGcj02(location.longitude, location.latitude)
         : [location.longitude, location.latitude];
+
+        console.log(
+          '[定位] 返回给网页的坐标:',
+          '纬度 =', coordinates[1],
+          '经度 =', coordinates[0],
+          '坐标类型 =', options.type || 'wgs84'
+      );
+      
       const result = {
         longitude: coordinates[0],
         latitude: coordinates[1],
@@ -80,7 +129,8 @@
     if (window.wx.getLocation.__dakaMacLocationBridge) return true;
 
     function getLocation(options = {}) {
-      const id = crypto.randomUUID();
+      //const id = crypto.randomUUID();
+      const id = createRequestId();
       const timeout = setTimeout(() => {
         const request = pending.get(id);
         if (!request) return;

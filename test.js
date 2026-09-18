@@ -23,7 +23,17 @@ const context = {
   navigator: { userAgent: 'Chrome on macOS' },
   location: { origin: 'http://peawx.sec.tjcu.edu.cn' },
   document: { documentElement: { setAttribute() {} } },
-  crypto: { randomUUID: () => 'test-request' },
+  //crypto: { randomUUID: () => 'test-request' },
+  //以下是gpt让我添加的代码，来修改randomUUID在Chrome中报错的问题
+  crypto: {
+  getRandomValues(array) {
+    for (let i = 0; i < array.length; i++) {
+      array[i] = i + 1;
+    }
+    return array;
+  }
+},
+//以上是gpt让我添加的代码，来修改randomUUID在Chrome中报错的问题
   setTimeout: () => 1,
   clearTimeout() {},
   setInterval() { throw new Error('wx bridge should install immediately'); },
